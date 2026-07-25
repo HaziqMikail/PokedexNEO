@@ -1,0 +1,59 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  
+  --color-pokemon-fire: #F08030;
+  --color-pokemon-water: #6890F0;
+  --color-pokemon-grass: #78C850;
+  --color-pokemon-electric: #F8D030;
+  --color-pokemon-ice: #98D8D8;
+  --color-pokemon-fighting: #C10000;
+  --color-pokemon-poison: #A040A0;
+  --color-pokemon-ground: #E0C068;
+  --color-pokemon-flying: #A890F0;
+  --color-pokemon-psychic: #F85888;
+  --color-pokemon-bug: #A8B820;
+  --color-pokemon-rock: #C0A000;
+  --color-pokemon-ghost: #705898;
+  --color-pokemon-dragon: #7038F8;
+  --color-pokemon-dark: #705848;
+  --color-pokemon-steel: #B8B8D0;
+  --color-pokemon-fairy: #EE99AC;
+  --color-pokemon-normal: #9FA18F;
+
+  --color-neo-bg: #E2E8F0; /* Slate 200/50 mix feel */
+  --color-neo-card: rgba(255, 255, 255, 0.7);
+  --color-neo-accent: #f43f5e;
+  --color-neo-border: rgba(0, 0, 0, 0.05);
+}
+
+@layer base {
+  body {
+    @apply bg-neo-bg text-gray-800 font-sans antialiased;
+    background-image: 
+      radial-gradient(circle at 50% -20%, rgba(244, 63, 94, 0.15), transparent 70%),
+      radial-gradient(circle at 100% 100%, rgba(59, 130, 246, 0.15), transparent 50%);
+    min-height: 100vh;
+  }
+
+  /* Glassmorphism utility */
+  .glass {
+    @apply bg-neo-card backdrop-blur-xl border border-neo-border;
+  }
+
+  .neo-glow {
+    box-shadow: 0 0 20px rgba(244, 63, 94, 0.3);
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-neo-accent/20 rounded-full hover:bg-neo-accent/40 transition-colors;
+}
