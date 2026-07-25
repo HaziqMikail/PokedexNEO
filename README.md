@@ -34,22 +34,6 @@ The app includes a dedicated "Tactical Ops" CounterPicker module, designed to ca
 - **Icons**: Lucide React & `pokemon-type-svg-icons`
 - **Data Source**: [PokeAPI](https://pokeapi.co/)
 
-## How to Run Locally
-
-First, clone this repository and ensure you have `Node.js` installed.
-
-1. Install dependencies:
-   ```bash
-   npm install
-   ```
-
-2. Start the local development server:
-   ```bash
-   npm run dev
-   ```
-
-3. Open `http://localhost:5173` in your browser.
-
 ## Roadmap
 - [x] Integrate PokeAPI
 - [x] Complete Kanto-Paldea Regions
