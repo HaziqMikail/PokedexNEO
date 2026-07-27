@@ -1,4 +1,4 @@
-# Pokédex Neo: Web Application
+# PokéBase: Web Application
 
 A modern, responsive, and beautiful Pokémon Web Application built with React, Vite, and Tailwind CSS. The app features a stunning light pastel aesthetic with frosted glass elements (glassmorphism) and smooth animations powered by Framer Motion. 
 
