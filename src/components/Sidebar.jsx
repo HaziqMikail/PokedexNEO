@@ -17,13 +17,13 @@ export default function Sidebar({
     <aside className="w-64 glass h-screen sticky top-0 flex flex-col p-6 overflow-y-auto z-10 text-gray-800 border-r border-black/5">
       <div className="flex items-center gap-3 mb-8">
         <div className="w-10 h-10 bg-neo-accent rounded-xl flex items-center justify-center neo-glow">
-          <Zap className="text-black fill-current" size={24} />
+          <img src="/pokeball.svg" alt="PokéBase Logo" className="w-6 h-6 object-contain" />
         </div>
         <h1 className="text-xl font-bold tracking-tight text-gray-900">PokéBase</h1>
       </div>
 
       <div className="mb-8">
-        <label className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-3 block">Search pokémon</label>
+        <label className="text-xs font-bold text-gray-800 uppercase tracking-widest mb-3 block">Search pokémon</label>
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
           <input
@@ -38,7 +38,7 @@ export default function Sidebar({
 
       <nav className="space-y-6">
         <div>
-          <label className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-3 block">Navigation</label>
+          <label className="text-xs font-bold text-gray-800 uppercase tracking-widest mb-3 block">Navigation</label>
           <div className="space-y-1">
             <NavItem icon={<Grid size={18} />} label="All Pokémon" active={activeRegion === 'All'} onClick={() => setActiveRegion('All')} />
             <NavItem icon={<Database size={18} />} label="Items Database" active={activeRegion === 'Items'} onClick={() => setActiveRegion('Items')} />
@@ -48,7 +48,7 @@ export default function Sidebar({
         </div>
 
         <div>
-          <label className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-3 block text-neo-accent flex items-center gap-2">
+          <label className="text-xs font-bold text-gray-800 uppercase tracking-widest mb-3 block text-neo-accent flex items-center gap-2">
             <Map size={14} /> Regions
           </label>
           <div className="flex flex-wrap gap-2 mt-3">
@@ -58,7 +58,7 @@ export default function Sidebar({
                 onClick={() => setActiveRegion(region)}
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${activeRegion === region
                   ? 'bg-neo-accent text-white scale-105 shadow-md shadow-neo-accent/30'
-                  : 'bg-black/5 text-gray-500 hover:bg-black/10 hover:text-gray-800'
+                  : 'bg-black/5 text-gray-800 hover:bg-black/10 hover:text-gray-800'
                   }`}
               >
                 {region}
@@ -68,7 +68,7 @@ export default function Sidebar({
         </div>
 
         <div>
-          <label className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-3 block">Types</label>
+          <label className="text-xs font-bold text-gray-800 uppercase tracking-widest mb-3 block">Types</label>
           <div className="flex flex-wrap gap-2 mt-3">
             {TYPES.map(type => (
               <button
@@ -77,7 +77,7 @@ export default function Sidebar({
                 style={activeType === type ? getTypeStyle(type) : {}}
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold capitalize transition-all border ${activeType === type
                   ? 'border-transparent shadow-md scale-105'
-                  : 'border-transparent bg-black/5 text-gray-500 hover:bg-black/10 hover:text-gray-800'
+                  : 'border-transparent bg-black/5 text-gray-800 hover:bg-black/10 hover:text-gray-800'
                   }`}
               >
                 {type}
@@ -96,7 +96,7 @@ function NavItem({ icon, label, active, onClick }) {
       onClick={onClick}
       className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${active
         ? 'bg-neo-accent/10 text-neo-accent border-l-4 border-neo-accent'
-        : 'text-gray-500 hover:bg-black/5 hover:text-gray-900'
+        : 'text-gray-800 hover:bg-black/5 hover:text-gray-900'
         }`}
     >
       {icon}
