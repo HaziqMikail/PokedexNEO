@@ -3,7 +3,8 @@
 1. need to consider different forms(galar,alolan etc),megas,g-max,shinies
 2. sometime image didnt load
 3. improve search recommendation,result,filter(region+type, etc.)
-4. team counter need to be improve as below
+4. detailed evolutions (split evolution,how to evolve(stone,trade etc),evolution requirements)
+5. team counter need to be improve as below
 
 ## type resist
 
