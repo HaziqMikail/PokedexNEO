@@ -6,6 +6,7 @@ import PokemonModal from './components/PokemonModal';
 import ItemsGrid from './components/ItemsGrid';
 import MovesGrid from './components/MovesGrid';
 import { fetchPokemonList, fetchPokemonByRegion, fetchTypeDetails } from './services/pokeApi';
+import TypeChart from './components/TypeChart';
 import { motion, AnimatePresence } from 'framer-motion';
 import { TYPE_COLORS } from './utils/typeLogic';
 
@@ -33,7 +34,7 @@ function App() {
     if (loadingRef.current) return;
     loadingRef.current = true;
     setLoading(true);
-    
+
     const region = activeRegionRef.current;
     const type = activeTypeRef.current;
 
@@ -42,15 +43,15 @@ function App() {
       if (region === 'Items' || region === 'Moves') {
         return; // Handled internally by their respective grids
       }
-      
+
       if (region === 'All' || region === 'CounterPicker') {
         if (type) {
           const typeData = await fetchTypeDetails(type);
           const detailedPokemon = await Promise.all(
-             typeData.pokemon.map(async p => {
-                const res = await fetch(p.pokemon.url);
-                return res.json();
-             })
+            typeData.pokemon.map(async p => {
+              const res = await fetch(p.pokemon.url);
+              return res.json();
+            })
           );
           setPokemonList(detailedPokemon);
           setHasMore(false);
@@ -84,8 +85,8 @@ function App() {
   }, [activeRegion, activeType]);
 
   const filteredPokemon = pokemonList.filter(p => {
-    const matchesSearch = p.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                          p.id.toString() === searchTerm;
+    const matchesSearch = p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      p.id.toString() === searchTerm;
     const matchesType = !activeType || p.types.some(t => t.type.name === activeType);
     return matchesSearch && matchesType;
   });
@@ -100,7 +101,7 @@ function App() {
       style={bgStyle}
       className={`flex text-gray-800 min-h-screen transition-colors duration-700 ${!currentBgColor || activeRegion === 'Items' ? 'bg-neo-bg' : ''}`}
     >
-      <Sidebar 
+      <Sidebar
         activeRegion={activeRegion}
         setActiveRegion={setActiveRegion}
         activeType={activeType}
@@ -108,21 +109,23 @@ function App() {
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
       />
-      
+
       <main className="flex-1 px-8 py-8 overflow-y-auto">
         <header className="mb-12 flex justify-between items-end">
           <div>
             <h2 className="text-4xl font-black uppercase tracking-tighter text-gray-900">
-              {activeRegion === 'CounterPicker' ? 'Tactical Ops' : `${activeRegion} Database`}
+              {activeRegion === 'CounterPicker' ? 'Counter' : activeRegion === 'TypeChart' ? 'Type Matrix' : `${activeRegion} Database`}
             </h2>
             <p className="text-gray-500 mt-2 font-medium">
-              {activeRegion === 'CounterPicker' 
-                ? 'Simulation mode active: Identifying vulnerabilities.' 
+              {activeRegion === 'CounterPicker'
+                ? 'Identifying counter for the enemy pokemon'
                 : activeRegion === 'Items'
-                ? 'Displaying comprehensive registry of registered held items and tools.'
-                : activeRegion === 'Moves'
-                ? 'Displaying total registry of tactical battle maneuvers.'
-                : `Displaying ${filteredPokemon.length} scanned entities in ${activeRegion} sector.`}
+                  ? 'Displaying comprehensive registry of registered held items and tools.'
+                  : activeRegion === 'Moves'
+                    ? 'Displaying pokemon movesets'
+                    : activeRegion === 'TypeChart'
+                      ? 'Displays the strengths and weaknesses of each type '
+                      : `Displaying pokemon in ${activeRegion} region.`}
             </p>
           </div>
         </header>
@@ -153,11 +156,20 @@ function App() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
             >
-              <MovesGrid 
-                searchTerm={searchTerm} 
-                activeType={activeMoveType} 
-                setActiveType={setActiveMoveType} 
+              <MovesGrid
+                searchTerm={searchTerm}
+                activeType={activeMoveType}
+                setActiveType={setActiveMoveType}
               />
+            </motion.div>
+          ) : activeRegion === 'TypeChart' ? (
+            <motion.div
+              key="typechart"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <TypeChart />
             </motion.div>
           ) : (
             <motion.div
@@ -166,8 +178,8 @@ function App() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
             >
-              <PokemonGrid 
-                pokemonList={filteredPokemon} 
+              <PokemonGrid
+                pokemonList={filteredPokemon}
                 loading={loading}
                 onLoadMore={loadPokemon}
                 hasMore={hasMore}
@@ -179,9 +191,10 @@ function App() {
 
         <AnimatePresence>
           {selectedPokemon && (
-            <PokemonModal 
-              pokemon={selectedPokemon} 
-              onClose={() => setSelectedPokemon(null)} 
+            <PokemonModal
+              pokemon={selectedPokemon}
+              onClose={() => setSelectedPokemon(null)}
+              onSelectPokemon={setSelectedPokemon}
             />
           )}
         </AnimatePresence>

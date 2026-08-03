@@ -28,6 +28,13 @@ export default function PokemonCard({ pokemon, onClick }) {
             src={pokemon.sprites.other['official-artwork'].front_default || pokemon.sprites.front_default}
             alt={pokemon.name}
             className="w-28 h-28 drop-shadow-2xl"
+            onError={(e) => {
+              if (e.target.src !== pokemon.sprites.front_default) {
+                e.target.src = pokemon.sprites.front_default;
+              } else {
+                e.target.style.display = 'none';
+              }
+            }}
           />
         </div>
 

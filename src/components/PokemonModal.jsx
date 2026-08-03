@@ -1,11 +1,17 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { X, ArrowRight } from 'lucide-react';
-import { fetchPokemonSpecies, fetchEvolutionChain } from '../services/pokeApi';
+import { X, ArrowRight, Loader2 } from 'lucide-react';
+import { fetchPokemonSpecies, fetchEvolutionChain, fetchPokemonDetails } from '../services/pokeApi';
 import { getTypeStyle, TYPE_COLORS } from '../utils/typeLogic';
 
-export default function PokemonModal({ pokemon, onClose }) {
+export default function PokemonModal({ pokemon: initialPokemon, onClose, onSelectPokemon }) {
+  const [pokemon, setPokemon] = useState(initialPokemon);
   const [evoChain, setEvoChain] = useState([]);
+  const [loadingEvoId, setLoadingEvoId] = useState(null);
+
+  useEffect(() => {
+    setPokemon(initialPokemon);
+  }, [initialPokemon]);
 
   useEffect(() => {
     if (!pokemon) return;
@@ -15,21 +21,40 @@ export default function PokemonModal({ pokemon, onClose }) {
         const species = await fetchPokemonSpecies(pokemon.id);
         const chainData = await fetchEvolutionChain(species.evolution_chain.url);
 
-        let current = chainData.chain;
         const arr = [];
-        while (current) {
-          const idParts = current.species.url.split('/').filter(Boolean);
+        function traverse(node) {
+          if (!node) return;
+          const idParts = node.species.url.split('/').filter(Boolean);
           const pId = idParts[idParts.length - 1];
-          arr.push({ name: current.species.name, id: pId });
-          current = current.evolves_to[0];
+          arr.push({ name: node.species.name, id: pId });
+          if (node.evolves_to && node.evolves_to.length > 0) {
+            node.evolves_to.forEach(child => traverse(child));
+          }
         }
+        traverse(chainData.chain);
         if (mounted) setEvoChain(arr);
       } catch (e) {
         console.error("Evolution fetch failed", e);
       }
     })();
     return () => { mounted = false; };
-  }, [pokemon]);
+  }, [pokemon?.id]);
+
+  const handleEvoClick = async (evoId) => {
+    if (!evoId || evoId.toString() === pokemon.id.toString()) return;
+    setLoadingEvoId(evoId);
+    try {
+      const data = await fetchPokemonDetails(evoId);
+      setPokemon(data);
+      if (onSelectPokemon) {
+        onSelectPokemon(data);
+      }
+    } catch (err) {
+      console.error("Failed to load evolution details", err);
+    } finally {
+      setLoadingEvoId(null);
+    }
+  };
 
   if (!pokemon) return null;
   const type = pokemon.types[0].type.name;
@@ -82,20 +107,45 @@ export default function PokemonModal({ pokemon, onClose }) {
               <div className="flex flex-col items-center min-w-0">
                 <h3 className="text-sm font-bold text-gray-800 uppercase tracking-widest mb-3 text-center">Evolution Line</h3>
                 <div className="flex items-center justify-center gap-3 flex-nowrap">
-                  {evoChain.map((evo, index) => (
-                    <div key={evo.name} className="flex items-center gap-2">
-                      <div className="flex flex-col items-center group">
-                        <div
-                          style={{ backgroundColor: TYPE_COLORS[type] ? TYPE_COLORS[type] + '1a' : 'rgba(0,0,0,0.06)' }}
-                          className="w-28 h-28 rounded-full flex items-center justify-center mb-2 group-hover:scale-110 transition-transform"
+                  {evoChain.map((evo, index) => {
+                    const isCurrent = evo.id.toString() === pokemon.id.toString();
+                    const isLoading = loadingEvoId === evo.id;
+
+                    return (
+                      <div key={evo.name} className="flex items-center gap-2">
+                        <button
+                          onClick={() => handleEvoClick(evo.id)}
+                          disabled={isCurrent || isLoading}
+                          className={`flex flex-col items-center group transition-all p-2 rounded-2xl ${
+                            isCurrent
+                              ? 'bg-black/10 ring-2 ring-neo-accent scale-105'
+                              : 'hover:bg-black/10 hover:scale-105 active:scale-95 cursor-pointer'
+                          }`}
+                          title={isCurrent ? `${evo.name} (Current)` : `Click to view ${evo.name}`}
                         >
-                          <img src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${evo.id}.png`} alt={evo.name} className="w-14 h-14 drop-shadow-md" />
-                        </div>
-                        <span className="text-sm font-bold capitalize text-gray-900 text-center whitespace-nowrap">{evo.name}</span>
+                          <div
+                            style={{ backgroundColor: TYPE_COLORS[type] ? TYPE_COLORS[type] + '1a' : 'rgba(0,0,0,0.06)' }}
+                            className="w-20 h-20 rounded-full flex items-center justify-center mb-1 relative"
+                          >
+                            {isLoading ? (
+                              <Loader2 className="animate-spin text-neo-accent" size={24} />
+                            ) : (
+                              <img
+                                src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${evo.id}.png`}
+                                alt={evo.name}
+                                className="w-14 h-14 drop-shadow-md group-hover:scale-110 transition-transform"
+                                onError={e => { e.target.style.display = 'none'; }}
+                              />
+                            )}
+                          </div>
+                          <span className={`text-xs font-bold capitalize text-center whitespace-nowrap ${isCurrent ? 'text-neo-accent font-black' : 'text-gray-900'}`}>
+                            {evo.name}
+                          </span>
+                        </button>
+                        {index < evoChain.length - 1 && <ArrowRight className="text-gray-800 shrink-0" size={16} />}
                       </div>
-                      {index < evoChain.length - 1 && <ArrowRight className="text-gray-800 shrink-0" size={16} />}
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             )}
