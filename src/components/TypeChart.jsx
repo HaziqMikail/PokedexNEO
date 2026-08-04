@@ -36,16 +36,16 @@ function getDefenderSummary(type) {
 }
 
 function cellBg(value) {
-  if (value === 0)   return 'rgba(22,22,28,0.88)';
-  if (value === 2)   return 'rgba(34,197,94,0.85)';
+  if (value === 0) return 'rgba(22,22,28,0.88)';
+  if (value === 2) return 'rgba(34,197,94,0.85)';
   if (value === 0.5) return 'rgba(185,28,28,0.85)';
   return null;
 }
 
 function cellLabel(value) {
-  if (value === 2)   return '2';
+  if (value === 2) return '2';
   if (value === 0.5) return '½';
-  if (value === 0)   return '0';
+  if (value === 0) return '0';
   return null;
 }
 
@@ -94,7 +94,7 @@ export default function TypeChart() {
   const [tooltipPos, setTooltipPos] = useState(null);  // { x, y } screen coords
 
   const clearSelection = () => { setSelectedRow(null); setSelectedCol(null); };
-  const clearHover    = () => { setHoveredCell(null); setTooltipPos(null); };
+  const clearHover = () => { setHoveredCell(null); setTooltipPos(null); };
 
   const handleRowClick = type => {
     setSelectedRow(prev => prev === type ? null : type);
@@ -143,10 +143,10 @@ export default function TypeChart() {
         {/* Legend */}
         <div className="flex flex-wrap gap-4 mt-5">
           {[
-            { bg: 'rgba(34,197,94,0.85)',  label: '2× Super Effective' },
-            { bg: 'rgba(185,28,28,0.85)', label: '½× Not Very Effective' },
-            { bg: 'rgba(22,22,28,0.88)',  label: '0× Immune' },
-            { bg: 'rgba(0,0,0,0.06)',     label: '1× Neutral (empty)', border: true },
+            { bg: 'rgba(34,197,94,0.85)', label: '200% Super Effective' },
+            { bg: 'rgba(185,28,28,0.85)', label: '50% Not Very Effective' },
+            { bg: 'rgba(0,0,0,0.06)', label: '100% Normal', border: true },
+            { bg: 'rgba(22,22,28,0.88)', label: '0% No Effect' },
           ].map(({ bg, label, border }) => (
             <div key={label} className="flex items-center gap-2">
               <div className="w-6 h-6 rounded-md" style={{ background: bg, border: border ? '1px solid rgba(0,0,0,0.12)' : 'none' }} />
@@ -183,7 +183,7 @@ export default function TypeChart() {
               <tr>
                 <th style={{ width: ROW_HEADER_W, minWidth: ROW_HEADER_W }} />
                 {TYPES.map((col, ci) => {
-                  const isActive  = selectedCol === col;
+                  const isActive = selectedCol === col;
                   const isCrossed = crosshairCol === ci;
                   return (
                     <th key={col} style={{ width: CELL + GAP, padding: GAP / 2 }}>
@@ -228,7 +228,7 @@ export default function TypeChart() {
             {/* ── Body rows ── */}
             <tbody>
               {TYPES.map((row, ri) => {
-                const isActiveRow  = selectedRow === row;
+                const isActiveRow = selectedRow === row;
                 const isCrossedRow = crosshairRow === ri;
 
                 return (
@@ -243,8 +243,8 @@ export default function TypeChart() {
                           backgroundColor: isActiveRow
                             ? TYPE_COLORS[row] + '28'
                             : isCrossedRow
-                            ? TYPE_COLORS[row] + '14'
-                            : 'transparent',
+                              ? TYPE_COLORS[row] + '14'
+                              : 'transparent',
                           boxShadow: isActiveRow ? `inset 0 0 0 1.5px ${TYPE_COLORS[row]}66` : 'none',
                           minWidth: ROW_HEADER_W - 8,
                         }}
@@ -279,7 +279,7 @@ export default function TypeChart() {
                     {/* Data cells */}
                     {TYPES.map((col, ci) => {
                       const val = getMultiplier(row, col);
-                      const bg  = cellBg(val);
+                      const bg = cellBg(val);
                       const lbl = cellLabel(val);
 
                       const isRowActive = selectedRow === row;
@@ -359,19 +359,19 @@ export default function TypeChart() {
           const row = TYPES[hoveredCell.rowIdx];
           const col = TYPES[hoveredCell.colIdx];
           const val = getMultiplier(row, col);
-          const bg  = cellBg(val);
+          const bg = cellBg(val);
           const isDark = !!bg; // colored cells get white text
           return (
             <motion.div
               key={`tt-${hoveredCell.rowIdx}-${hoveredCell.colIdx}`}
               initial={{ opacity: 0, y: -4, scale: 0.94 }}
-              animate={{ opacity: 1, y: 0,  scale: 1 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -4, scale: 0.94 }}
               transition={{ duration: 0.1 }}
               style={{
                 position: 'fixed',
                 left: tooltipPos.x,
-                top:  tooltipPos.y,
+                top: tooltipPos.y,
                 transform: 'translateX(-50%)',
                 zIndex: 9999,
                 pointerEvents: 'none',
@@ -382,8 +382,8 @@ export default function TypeChart() {
                 margin: '0 auto',
                 width: 0,
                 height: 0,
-                borderLeft:   '7px solid transparent',
-                borderRight:  '7px solid transparent',
+                borderLeft: '7px solid transparent',
+                borderRight: '7px solid transparent',
                 borderBottom: `7px solid ${bg ? bg : 'rgba(20,20,28,0.85)'}`,
               }} />
               {/* Tooltip body */}
