@@ -5,26 +5,26 @@ import { calculateWeaknesses, getBestCounterTypes, getWeaknesses, getResistances
 import PokemonCard from './PokemonCard';
 
 const ALL_TYPES = [
-  'normal','fire','water','electric','grass','ice',
-  'fighting','poison','ground','flying','psychic','bug',
-  'rock','ghost','dragon','dark','steel','fairy',
+  'normal', 'fire', 'water', 'electric', 'grass', 'ice',
+  'fighting', 'poison', 'ground', 'flying', 'psychic', 'bug',
+  'rock', 'ghost', 'dragon', 'dark', 'steel', 'fairy',
 ];
 
 function multiplierLabel(m) {
-  if (m === 4)   return '4×';
-  if (m === 2)   return '2×';
+  if (m === 4) return '4×';
+  if (m === 2) return '2×';
   if (m === 0.5) return '½×';
   if (m === 0.25) return '¼×';
-  if (m === 0)   return '0×';
+  if (m === 0) return '0×';
   return '1×';
 }
 
 function multiplierColor(m) {
-  if (m >= 4)    return { bg: 'rgba(220,38,38,0.9)',   text: '#fff' }; // double weak — bright red
-  if (m >= 2)    return { bg: 'rgba(34,197,94,0.85)',  text: '#fff' }; // super effective — green
-  if (m === 0)   return { bg: 'rgba(22,22,28,0.88)',   text: '#fff' }; // immune — black
+  if (m >= 4) return { bg: 'rgba(220,38,38,0.9)', text: '#fff' }; // double weak — bright red
+  if (m >= 2) return { bg: 'rgba(34,197,94,0.85)', text: '#fff' }; // super effective — green
+  if (m === 0) return { bg: 'rgba(22,22,28,0.88)', text: '#fff' }; // immune — black
   if (m <= 0.25) return { bg: 'rgba(124,58,237,0.85)', text: '#fff' }; // double resist — purple
-  if (m < 1)     return { bg: 'rgba(185,28,28,0.8)',   text: '#fff' }; // resist — dark red
+  if (m < 1) return { bg: 'rgba(185,28,28,0.8)', text: '#fff' }; // resist — dark red
   return null;
 }
 
@@ -69,19 +69,19 @@ function TypeEffectivenessBreakdown({ enemyTypes }) {
 
   ALL_TYPES.forEach(type => {
     const m = multipliers[type];
-    if (m === 4)    groups['Double Weakness (4×)'].push(type);
-    else if (m === 2)    groups['Super Effective (2×)'].push(type);
-    else if (m === 0.5)  groups['Resisted (½×)'].push(type);
+    if (m === 4) groups['Double Weakness (4×)'].push(type);
+    else if (m === 2) groups['Super Effective (2×)'].push(type);
+    else if (m === 0.5) groups['Resisted (½×)'].push(type);
     else if (m === 0.25) groups['Double Resist (¼×)'].push(type);
-    else if (m === 0)    groups['Immune (0×)'].push(type);
+    else if (m === 0) groups['Immune (0×)'].push(type);
   });
 
   const groupConfig = {
-    'Double Weakness (4×)': { bg: 'rgba(220,38,38,0.12)',   border: 'rgba(220,38,38,0.3)',  lbl: 'rgba(220,38,38,1)',   badge: 'rgba(220,38,38,0.9)'  },
-    'Super Effective (2×)': { bg: 'rgba(34,197,94,0.10)',   border: 'rgba(34,197,94,0.3)',  lbl: 'rgba(34,197,94,1)',   badge: 'rgba(34,197,94,0.85)' },
-    'Resisted (½×)':        { bg: 'rgba(185,28,28,0.10)',   border: 'rgba(185,28,28,0.25)', lbl: 'rgba(185,28,28,1)',   badge: 'rgba(185,28,28,0.85)' },
-    'Double Resist (¼×)':   { bg: 'rgba(124,58,237,0.10)',  border: 'rgba(124,58,237,0.25)',lbl: 'rgba(124,58,237,1)',  badge: 'rgba(124,58,237,0.85)'},
-    'Immune (0×)':          { bg: 'rgba(22,22,28,0.08)',    border: 'rgba(22,22,28,0.2)',   lbl: '#374151',             badge: 'rgba(22,22,28,0.88)'  },
+    'Double Weakness (4×)': { bg: 'rgba(220,38,38,0.12)', border: 'rgba(220,38,38,0.3)', lbl: 'rgba(220,38,38,1)', badge: 'rgba(220,38,38,0.9)' },
+    'Super Effective (2×)': { bg: 'rgba(34,197,94,0.10)', border: 'rgba(34,197,94,0.3)', lbl: 'rgba(34,197,94,1)', badge: 'rgba(34,197,94,0.85)' },
+    'Resisted (½×)': { bg: 'rgba(185,28,28,0.10)', border: 'rgba(185,28,28,0.25)', lbl: 'rgba(185,28,28,1)', badge: 'rgba(185,28,28,0.85)' },
+    'Double Resist (¼×)': { bg: 'rgba(124,58,237,0.10)', border: 'rgba(124,58,237,0.25)', lbl: 'rgba(124,58,237,1)', badge: 'rgba(124,58,237,0.85)' },
+    'Immune (0×)': { bg: 'rgba(22,22,28,0.08)', border: 'rgba(22,22,28,0.2)', lbl: '#374151', badge: 'rgba(22,22,28,0.88)' },
   };
 
   return (
@@ -327,8 +327,8 @@ export default function CounterPicker({ onPokemonClick }) {
   const enemyTypes = enemy?.types.map(t => t.type.name) ?? [];
 
   const tabs = [
-    { id: 'counters',     label: 'Counter Picks',         icon: <Swords size={14} /> },
-    { id: 'effectiveness', label: 'Type Effectiveness',   icon: <Zap size={14} /> },
+    { id: 'counters', label: 'Counter Picks', icon: <Swords size={14} /> },
+    { id: 'effectiveness', label: 'Type Effectiveness', icon: <Zap size={14} /> },
   ];
 
   return (
@@ -362,7 +362,7 @@ export default function CounterPicker({ onPokemonClick }) {
             disabled={searching}
             className="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-xl transition-all shadow-lg shadow-red-500/20 active:scale-95 disabled:opacity-50 flex items-center gap-2"
           >
-            {searching ? <Loader2 className="animate-spin" size={18} /> : <><Search size={16} />SCAN</>}
+            {searching ? <Loader2 className="animate-spin" size={18} /> : <><Search size={16} />Find</>}
           </button>
         </form>
 
