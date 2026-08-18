@@ -62,7 +62,7 @@ export default function Sidebar({
 
       <nav className="space-y-6">
         <div>
-          <label className="text-xs font-bold text-gray-800 uppercase tracking-widest mb-3 block">Navigation</label>
+          <label className="text-xs font-bold text-gray-800 uppercase tracking-widest mb-4 block">Navigation</label>
           <div className="space-y-1">
             <NavItem icon={<Grid size={18} />} label="All Pokémon" active={activeRegion === 'All'} onClick={() => handleNavClick('All')} />
             <NavItem icon={<Database size={18} />} label="Items " active={activeRegion === 'Items'} onClick={() => handleNavClick('Items')} />
@@ -120,7 +120,7 @@ function NavItem({ icon, label, active, onClick }) {
     <button
       onClick={onClick}
       className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${active
-        ? 'bg-neo-accent/10 text-neo-accent border-l-4 border-neo-accent'
+        ? 'bg-neo-accent/10 text-neo-accent border-1 border-neo-accent'
         : 'text-gray-800 hover:bg-black/5 hover:text-gray-900'
         }`}
     >
