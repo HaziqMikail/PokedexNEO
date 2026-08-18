@@ -64,8 +64,8 @@ export default function PokemonCard({ pokemon, onClick }) {
         </div>
       </div>
 
-      {/* Neo Accent Bottom bar */}
-      <div className="absolute bottom-0 left-0 h-1 bg-neo-accent w-0 group-hover:w-full transition-all duration-500" />
+      {/* Hover glow */}
+      <div className="absolute inset-0 rounded-3xl border-2 border-neo-accent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
     </motion.div>
   );
 }
