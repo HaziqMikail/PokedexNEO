@@ -135,8 +135,6 @@ function CounterStrategyBadge({ counter, enemyTypes }) {
     .filter(({ multiplier }) => multiplier >= 2)
     .sort((a, b) => b.multiplier - a.multiplier);
 
-  // Is the counter itself resistant to the enemy's attack types?
-  const { calculateWeaknesses: calc } = { calculateWeaknesses };
   // We reuse calculateWeaknesses: counter's defence vs enemy attack
   const counterDefense = calculateWeaknesses(counterTypes);
   const resistsEnemyTypes = enemyTypes
@@ -278,7 +276,7 @@ export default function CounterPicker({ onPokemonClick }) {
       setEnemy(data);
       setActiveTab('counters');
       findCounters(data);
-    } catch (err) {
+    } catch {
       setError('Pokémon not found. Check the name or ID.');
       setEnemy(null);
       setSuggestions([]);
@@ -332,21 +330,21 @@ export default function CounterPicker({ onPokemonClick }) {
   ];
 
   return (
-    <div className="max-w-6xl mx-auto py-8">
+    <div className="max-w-6xl mx-auto py-2 sm:py-6">
       {/* Search card */}
-      <div className="glass rounded-3xl p-8 mb-10 relative overflow-hidden">
+      <div className="glass rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 mb-6 sm:mb-10 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-red-500/5 rounded-full blur-3xl -mr-32 -mt-32 pointer-events-none" />
-        <div className="flex items-center gap-4 mb-6">
-          <div className="w-12 h-12 bg-red-500/20 rounded-2xl flex items-center justify-center border border-red-500/30">
-            <ShieldAlert className="text-red-500" size={28} />
+        <div className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 bg-red-500/20 rounded-xl sm:rounded-2xl flex items-center justify-center border border-red-500/30 shrink-0">
+            <ShieldAlert className="text-red-500" size={24} />
           </div>
           <div>
-            <h2 className="text-2xl font-bold tracking-tight">Counter-Picker</h2>
-            <p className="text-gray-600 text-sm">Analyze type effectiveness and find optimal counter Pokémon</p>
+            <h2 className="text-xl sm:text-2xl font-bold tracking-tight">Counter-Picker</h2>
+            <p className="text-gray-600 text-xs sm:text-sm">Analyze type effectiveness and find optimal counter Pokémon</p>
           </div>
         </div>
 
-        <form onSubmit={handleSearch} className="flex gap-3 max-w-md">
+        <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-2.5 sm:gap-3 max-w-md">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
             <input
@@ -354,13 +352,13 @@ export default function CounterPicker({ onPokemonClick }) {
               placeholder="Enter enemy Pokémon name or ID..."
               value={enemySearch}
               onChange={e => setEnemySearch(e.target.value)}
-              className="w-full bg-black/5 border border-black/10 rounded-xl py-3 pl-10 pr-4 text-sm focus:outline-none focus:border-red-400 transition-colors text-gray-800 placeholder-gray-500"
+              className="w-full bg-black/5 border border-black/10 rounded-xl py-2.5 sm:py-3 pl-10 pr-4 text-xs sm:text-sm focus:outline-none focus:border-red-400 transition-colors text-gray-800 placeholder-gray-500"
             />
           </div>
           <button
             type="submit"
             disabled={searching}
-            className="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-xl transition-all shadow-lg shadow-red-500/20 active:scale-95 disabled:opacity-50 flex items-center gap-2"
+            className="bg-red-500 hover:bg-red-600 text-white font-bold py-2.5 sm:py-3 px-6 rounded-xl transition-all shadow-lg shadow-red-500/20 active:scale-95 disabled:opacity-50 flex items-center justify-center gap-2 text-xs sm:text-sm"
           >
             {searching ? <Loader2 className="animate-spin" size={18} /> : <><Search size={16} />Find</>}
           </button>
@@ -370,43 +368,43 @@ export default function CounterPicker({ onPokemonClick }) {
       </div>
 
       {enemy && (
-        <div className="space-y-8">
+        <div className="space-y-6 sm:space-y-8">
           {/* Enemy profile */}
-          <div className="glass rounded-3xl p-8 relative overflow-hidden">
+          <div className="glass rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 relative overflow-hidden">
             <div
               className="absolute inset-0 opacity-5 pointer-events-none"
               style={{ background: `radial-gradient(circle at 80% 50%, ${TYPE_COLORS[enemyTypes[0]]} 0%, transparent 70%)` }}
             />
-            <div className="flex flex-col md:flex-row gap-8 items-center relative">
+            <div className="flex flex-col md:flex-row gap-5 sm:gap-8 items-center relative">
               {/* Sprite */}
               <div
-                className="w-44 h-44 rounded-full flex items-center justify-center border border-black/10 flex-shrink-0"
+                className="w-32 h-32 sm:w-40 sm:h-40 md:w-44 md:h-44 rounded-full flex items-center justify-center border border-black/10 shrink-0"
                 style={{ backgroundColor: TYPE_COLORS[enemyTypes[0]] + '15' }}
               >
                 <img
                   src={enemy.sprites.other['official-artwork'].front_default || enemy.sprites.front_default}
                   alt={enemy.name}
-                  className="w-36 h-36 drop-shadow-2xl brightness-75 grayscale sepia hue-rotate-180"
+                  className="w-28 h-28 sm:w-32 sm:h-32 md:w-36 md:h-36 drop-shadow-2xl brightness-75 grayscale sepia hue-rotate-180"
                   onError={e => { e.target.src = enemy.sprites.front_default; }}
                 />
               </div>
 
               {/* Info */}
-              <div className="flex-1 text-center md:text-left">
-                <label className="text-xs font-bold text-red-500 uppercase tracking-widest mb-1 block">Enemy Pokémon</label>
-                <h3 className="text-4xl font-black uppercase tracking-tighter mb-3 capitalize">{enemy.name}</h3>
+              <div className="flex-1 text-center md:text-left min-w-0">
+                <label className="text-[10px] sm:text-xs font-bold text-red-500 uppercase tracking-widest mb-1 block">Enemy Pokémon</label>
+                <h3 className="text-2xl sm:text-3xl md:text-4xl font-black uppercase tracking-tighter mb-2 sm:mb-3 capitalize">{enemy.name}</h3>
 
-                <div className="flex gap-2 justify-center md:justify-start mb-5">
+                <div className="flex gap-2 justify-center md:justify-start mb-4 sm:mb-5">
                   {enemy.types.map(t => (
                     <span
                       key={t.type.name}
                       style={getTypeStyle(t.type.name)}
-                      className="px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest flex items-center gap-1.5"
+                      className="px-3 py-1 sm:px-4 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-widest flex items-center gap-1.5"
                     >
                       <img
                         src={`https://raw.githubusercontent.com/duiker101/pokemon-type-svg-icons/master/icons/${t.type.name}.svg`}
                         alt={t.type.name}
-                        className="w-4 h-4 opacity-90"
+                        className="w-3.5 h-3.5 opacity-90"
                         onError={e => { e.target.style.display = 'none'; }}
                       />
                       {t.type.name}
@@ -448,12 +446,12 @@ export default function CounterPicker({ onPokemonClick }) {
           </div>
 
           {/* Tabs */}
-          <div className="flex gap-2">
+          <div className="flex gap-2 overflow-x-auto pb-1">
             {tabs.map(tab => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold transition-all"
+                className="flex items-center gap-2 px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all shrink-0"
                 style={{
                   backgroundColor: activeTab === tab.id ? '#f43f5e' : 'rgba(0,0,0,0.05)',
                   color: activeTab === tab.id ? '#fff' : '#374151',
@@ -469,17 +467,19 @@ export default function CounterPicker({ onPokemonClick }) {
           {/* Tab: Counter Picks */}
           {activeTab === 'counters' && (
             <div>
-              <div className="flex items-center gap-3 mb-6">
-                <Swords className="text-neo-accent" size={22} />
-                <h3 className="text-xl font-bold uppercase tracking-tight">Recommended Counters</h3>
-                <span className="text-xs text-gray-500 font-medium">Strategy badges show attack & defense matchups</span>
+              <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 mb-4 sm:mb-6">
+                <div className="flex items-center gap-2">
+                  <Swords className="text-neo-accent" size={20} />
+                  <h3 className="text-lg sm:text-xl font-bold uppercase tracking-tight">Recommended Counters</h3>
+                </div>
+                <span className="text-[10px] sm:text-xs text-gray-500 font-medium">Strategy badges show attack & defense matchups</span>
               </div>
               {loading ? (
                 <div className="flex items-center justify-center py-20">
                   <Loader2 className="animate-spin text-neo-accent" size={32} />
                 </div>
               ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                   {suggestions.map(p => (
                     <CounterCard
                       key={p.id}
@@ -496,9 +496,9 @@ export default function CounterPicker({ onPokemonClick }) {
           {/* Tab: Type Effectiveness */}
           {activeTab === 'effectiveness' && (
             <div>
-              <div className="flex items-center gap-3 mb-6">
-                <Zap className="text-neo-accent" size={22} />
-                <h3 className="text-xl font-bold uppercase tracking-tight">
+              <div className="flex items-center gap-2.5 mb-4 sm:mb-6">
+                <Zap className="text-neo-accent" size={20} />
+                <h3 className="text-lg sm:text-xl font-bold uppercase tracking-tight">
                   Full Type Effectiveness vs{' '}
                   <span className="capitalize">{enemy.name}</span>
                 </h3>
